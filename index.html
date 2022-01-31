@@ -1,0 +1,461 @@
+<html>
+<head lang="en">
+    <title>Cas confirmés entre 25 et 31 décembre</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link href="default.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="fonts.css" rel="stylesheet" type="text/css" media="all" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css">
+    <link rel="stylesheet" href="leaflet.css" />
+    <script src="leaflet.js"></script>
+    
+	<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+	</head>
+
+	<style>
+        #map {
+            width: 900px;
+            height: 800px;
+        }
+
+        .info {
+            padding: 7px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: black;
+            background: rgba(240,240,240,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.6);
+            border-radius: 5px;
+        }
+        .info h4 {
+            margin: 0 0 5px;
+            color: #252525;
+        }
+        .legend i { 
+        width: 65px; 
+        height: 16px; 
+        float: left; 
+        margin-right: 8px; 
+        opacity: 0.7; 
+        }
+        body{ background-color: #f7f1ee;}
+        h1{
+            text-align: center;
+            text-size-adjust: 20px;
+            border: solid ;
+            color: #3471f5;
+            
+        }
+        h3{text-align: center;
+            color: #4a9dfb;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            line-height: 0cm;
+        }
+    </style>
+<body>
+<h1>Cas confirmés infectés par Covid19 entre 25 et 31 décembre 2021</h1>
+<div id="wrapper">
+        <center><div id="mapid" style="width: 950px; height: 610px;"></div></center>
+        <div class="leaflet-top leaflet-right"><div class="info leaflet-control">
+		<script src="ProvincesSouss.geojson"></script>
+		<script src="SliderControl.js"></script>
+            <script>
+                var sliderControl = null;
+                var mymap = L.map('mapid').setView([29.75, -8.3], 8); 
+
+                var test1= L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+					maxZoom: 18,
+					attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+						'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+						'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+					id: 'mapbox.light'
+				}).addTo(mymap);
+  					
+
+                function getColor(d) {
+                    return d > 10 ? '#a50f15' :
+                        d > 7  ? '#de2d26' :
+                        d > 3  ? '#fb6a4a' :
+                        d > 0   ? '#fcae91' : 
+                        		'#fff';
+                    }
+    
+   
+                function style1(feature) {
+                    return {
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.7,
+                        fillColor: getColor(feature.properties.Cas_25dec)
+                    };
+                }
+    
+                function style2(feature) {
+                    return {
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.7,
+                        fillColor: getColor(feature.properties.Cas_26dec)
+                    };
+                }
+				function style3(feature) {
+                    return {
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.7,
+                        fillColor: getColor(feature.properties.Cas_27dec)
+                    };
+                }
+				function style4(feature) {
+                    return {
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.7,
+                        fillColor: getColor(feature.properties.Cas_28dec)
+                    };
+                }
+				 function style5(feature) {
+                    return {
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.7,
+                        fillColor: getColor(feature.properties.Cas_29dec)
+                    };
+                }
+				function style6(feature) {
+                    return {
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.7,
+                        fillColor: getColor(feature.properties.Cas_30dec)
+                    };
+                }
+				function style7(feature) {
+                    return {
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.7,
+                        fillColor: getColor(feature.properties.Cas_31dec)
+                    };
+                }
+				 
+					
+                function highlightFeature(e) {
+                    var layer = e.target;
+
+                    layer.setStyle({
+                        weight: 5,
+                        color: '#666',
+                        dashArray: '',
+                        fillOpacity: 0.7
+                    });
+                    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+	        			layer.bringToFront();
+	    			}
+	        			info.update(layer.feature.properties);                   
+                }
+
+                var geojson1;
+
+                function resetHighlight1(e) {
+                    geojson1.resetStyle(e.target);
+                    
+                }
+				var geojson2;
+
+                function resetHighlight2(e) {
+                    geojson2.resetStyle(e.target);
+                    
+                }
+				var geojson3;
+
+                function resetHighlight3(e) {
+                    geojson3.resetStyle(e.target);
+                
+                }
+				var geojson4;  
+                
+				function resetHighlight4(e) {
+                    geojson4.resetStyle4(e.target);
+                    
+                }
+				var geojson5;
+
+                function resetHighlight5(e) {
+                    geojson5.resetStyle(e.target);
+                    
+                }
+				var geojson6;
+
+                function resetHighlight6(e) {
+                    geojson6.resetStyle(e.target);
+				
+                }	
+                var geojson7;
+                
+                function resetHighlight7(e) {
+                    geojson7.resetStyle(e.target);
+                    
+                }
+
+
+                function zoomToFeature(e) {
+                    mymap.fitBounds(e.target.getBounds());
+                }
+
+                function onEachFeature1(feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight1,
+                        click: zoomToFeature
+                    });
+                }
+				 function onEachFeature2(feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight2,
+                        click: zoomToFeature
+                    });
+                }
+				function onEachFeature3(feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight3,
+                        click: zoomToFeature
+                    });
+                }
+				
+				function onEachFeature4(feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight4,
+                        click: zoomToFeature
+                    });
+                }
+				 function onEachFeature5(feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight5,
+                        click: zoomToFeature
+                    });
+                }
+				function onEachFeature6(feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight6,
+                        click: zoomToFeature
+                    });
+                }                
+				function onEachFeature7(feature, layer) {
+                    layer.on({
+                        mouseover: highlightFeature,
+                        mouseout: resetHighlight7,
+                        click: zoomToFeature
+                    });
+                }
+				 
+				var info = L.control();
+
+				info.onAdd = function (mymap) {
+    				this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    				this.update();
+    				return this._div;
+				};
+
+				// method that we will use to update the control based on feature properties passed
+				info.update = function (props) {
+    				this._div.innerHTML = '<h4>Cas confirmés infectés par Covid 19</h4>' +  (props ?
+        				'Province : <b>' + props.NAME + '</b> <br />Cas confirmés : ' + props.Cas_25dec + ' .....</sup>'
+        				: 'Merci de mettre le curseur sur la province');
+				};
+
+				info.addTo(mymap);
+
+			
+                geojson1 = L.geoJson(mesProvinces,{
+                	style: style1, 
+                	onEachFeature: onEachFeature1,
+                    time: "25 décembre 2021"
+                }).addTo(mymap);
+
+				info.onAdd = function (mymap) {
+    				this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    				this.update();
+    				return this._div;
+				};
+
+				// method that we will use to update the control based on feature properties passed
+				info.update = function (props) {
+    				this._div.innerHTML = '<h4>Cas confirmés infectés par Covid 19</h4>' +  (props ?
+        				'Province : <b>' + props.NAME + '</b> <br />Cas confirmés : ' + props.Cas_26dec + ' .....</sup>'
+        				: 'Merci de mettre le curseur sur la province');
+				};
+
+				info.addTo(mymap);
+
+			
+                geojson2 = L.geoJson(mesProvinces,{
+                	style: style2, 
+                	onEachFeature: onEachFeature2,
+                    time: "26 décembre 2021"
+                }).addTo(mymap);
+
+                info.onAdd = function (mymap) {
+    				this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    				this.update();
+    				return this._div;
+				};
+
+				// method that we will use to update the control based on feature properties passed
+				info.update = function (props) {
+    				this._div.innerHTML = '<h4>Cas confirmés infectés par Covid 19</h4>' +  (props ?
+        				'Province : <b>' + props.NAME + '</b> <br />Cas confirmés : ' + props.Cas_27dec + ' .....</sup>'
+        				: 'Merci de mettre le curseur sur la province');
+				};
+
+				info.addTo(mymap);
+
+			
+                geojson3 = L.geoJson(mesProvinces,{
+                	style: style3, 
+                	onEachFeature: onEachFeature3,
+                    time: "27 décembre 2021"
+                }).addTo(mymap);
+				
+				info.onAdd = function (mymap) {
+    				this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    				this.update();
+    				return this._div;
+				};
+
+				// method that we will use to update the control based on feature properties passed
+				info.update = function (props) {
+    				this._div.innerHTML = '<h4>Cas confirmés infectés par Covid 19</h4>' +  (props ?
+        				'Province : <b>' + props.NAME + '</b> <br />Cas confirmés : ' + props.Cas_28dec + ' .....</sup>'
+        				: 'Merci de mettre le curseur sur la province');
+				};
+
+				info.addTo(mymap);
+
+			
+                geojson4 = L.geoJson(mesProvinces,{
+                	style: style4, 
+                	onEachFeature: onEachFeature4,
+                    time: "28 décembre 2021"
+                }).addTo(mymap);
+
+                info.onAdd = function (mymap) {
+    				this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    				this.update();
+    				return this._div;
+				};
+
+				// method that we will use to update the control based on feature properties passed
+				info.update = function (props) {
+    				this._div.innerHTML = '<h4>Cas confirmés infectés par Covid 19</h4>' +  (props ?
+        				'Province : <b>' + props.NAME + '</b> <br />Cas confirmés : ' + props.Cas_29dec + ' .....</sup>'
+        				: 'Merci de mettre le curseur sur la province');
+				};
+
+				info.addTo(mymap);
+
+			
+                geojson5 = L.geoJson(mesProvinces,{
+                	style: style5, 
+                	onEachFeature: onEachFeature5,
+                    time: "29 décembre 2021"
+                }).addTo(mymap);
+
+                info.onAdd = function (mymap) {
+    				this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    				this.update();
+    				return this._div;
+				};
+
+				// method that we will use to update the control based on feature properties passed
+				info.update = function (props) {
+    				this._div.innerHTML = '<h4>Cas confirmés infectés par Covid 19</h4>' +  (props ?
+        				'Province : <b>' + props.NAME + '</b> <br />Cas confirmés : ' + props.Cas_30dec + ' .....</sup>'
+        				: 'Merci de mettre le curseur sur la province');
+				};
+
+				info.addTo(mymap);
+
+			
+                geojson6 = L.geoJson(mesProvinces,{
+                	style: style6, 
+                	onEachFeature: onEachFeature6,
+                    time: "30 décembre 2021"
+                }).addTo(mymap);
+
+                info.onAdd = function (mymap) {
+    				this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    				this.update();
+    				return this._div;
+				};
+
+				// method that we will use to update the control based on feature properties passed
+				info.update = function (props) {
+    				this._div.innerHTML = '<h4>Cas confirmés infectés par Covid 19</h4>' +  (props ?
+        				'Province : <b>' + props.NAME + '</b> <br />Cas confirmés : ' + props.Cas_31dec + ' .....</sup>'
+        				: 'Merci de mettre le curseur sur la province');
+				};
+
+				info.addTo(mymap);
+
+			
+                geojson7 = L.geoJson(mesProvinces,{
+                	style: style7, 
+                	onEachFeature: onEachFeature7,
+                    time: "31 décembre 2021"
+                }).addTo(mymap);
+				
+				layerGroup = L.layerGroup([geojson1, geojson2, geojson3, geojson4, geojson5, geojson6, geojson7]);
+				var sliderControl = L.control.sliderControl({layer:layerGroup, follow: true});
+				mymap.addControl(sliderControl);
+				sliderControl.startSlider();
+    
+				var legend = L.control({position: 'bottomright'});
+
+                legend.onAdd = function (mymap) {
+                    var div = L.DomUtil.create('div', 'info legend');
+                    var grades = [1, 3, 7, 10];
+                    var labels = [];
+                    var from, to;
+
+                    for (var i = 0; i < grades.length; i++) {
+                        from = grades[i];
+                        to = grades[i + 1];
+            
+                    labels.push(
+                        '<i style="background:' + getColor(from + 1) + '"></i> ' +
+                        from + (to ? '&ndash;' + to : '+'));
+                    }
+
+                    div.innerHTML = labels.join('<br>');
+                    return div;
+                };
+
+                legend.addTo(mymap);
+				
+				
+            </script>
+
+</body>
+</html>
